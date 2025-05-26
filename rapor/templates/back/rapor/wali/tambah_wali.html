@@ -1,0 +1,140 @@
+{% extends 'back/base.html' %}
+
+{% block title %}Tambah Wali{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Tambah Wali</h2>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    {% if form.non_field_errors %}
+        <div class="alert alert-danger">
+            {% for error in form.non_field_errors %}
+                <div>{{ error }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <form method="POST">
+                {% csrf_token %}
+
+                <!-- Pilihan cara buat user -->
+                <div class="mb-3">
+                    <label class="form-label">Pilih Metode User</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="user_option" id="existingUserOption" value="existing" checked>
+                        <label class="form-check-label" for="existingUserOption">Pilih User yang Sudah Ada</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="user_option" id="newUserOption" value="new">
+                        <label class="form-check-label" for="newUserOption">Buat User Baru</label>
+                    </div>
+                </div>
+
+                <!-- Field user -->
+                <div class="mb-3" id="existingUserFields">
+                    <label for="{{ form.user.id_for_label }}" class="form-label">
+                        User (pilih jika sudah ada) <span class="text-muted">(opsional)</span>
+                    </label>
+                    {{ form.user }}
+                    {% if form.user.errors %}
+                        <div class="text-danger">{{ form.user.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <!-- Field username dan password -->
+                <div id="newUserFields" style="display: none;">
+                    <div class="mb-3">
+                        {{ form.username.label_tag }}
+                        {{ form.username }}
+                        {% if form.username.errors %}
+                            <div class="text-danger">{{ form.username.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.password.label_tag }}
+                        {{ form.password }}
+                        {% if form.password.errors %}
+                            <div class="text-danger">{{ form.password.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Field Nama -->
+                <div class="mb-3">
+                    {{ form.nama.label_tag }}
+                    {{ form.nama }}
+                    {% if form.nama.errors %}
+                        <div class="text-danger">{{ form.nama.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <!-- Field No Telepon -->
+                <div class="mb-3">
+                    {{ form.no_telepon.label_tag }}
+                    {{ form.no_telepon }}
+                    {% if form.no_telepon.errors %}
+                        <div class="text-danger">{{ form.no_telepon.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <!-- Field Alamat -->
+                <div class="mb-3">
+                    {{ form.alamat.label_tag }}
+                    {{ form.alamat }}
+                    {% if form.alamat.errors %}
+                        <div class="text-danger">{{ form.alamat.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <!-- Field Siswa -->
+                <div class="mb-3">
+                    {{ form.siswa.label_tag }}
+                    {{ form.siswa }}
+                    {% if form.siswa.errors %}
+                        <div class="text-danger">{{ form.siswa.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <!-- Tombol -->
+                <div class="d-flex justify-content-end">
+                    <a href="{% url 'daftar_wali' %}" class="btn btn-secondary me-2">Kembali</a>
+                    <button type="submit" class="btn btn-primary">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    const existingUserRadio = document.getElementById("existingUserOption");
+    const newUserRadio = document.getElementById("newUserOption");
+    const existingUserFields = document.getElementById("existingUserFields");
+    const newUserFields = document.getElementById("newUserFields");
+
+    function toggleUserFields() {
+        if (existingUserRadio.checked) {
+            existingUserFields.style.display = "block";
+            newUserFields.style.display = "none";
+        } else {
+            existingUserFields.style.display = "none";
+            newUserFields.style.display = "block";
+        }
+    }
+
+    existingUserRadio.addEventListener("change", toggleUserFields);
+    newUserRadio.addEventListener("change", toggleUserFields);
+    toggleUserFields();  // Jalankan saat pertama kali
+</script>
+{% endblock %}

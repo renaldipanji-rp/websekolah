@@ -1,0 +1,45 @@
+{% extends "back/base.html" %}
+{% block content %}
+<div class="container py-4">
+    <h3>Tambah Semester Baru</h3>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <form method="POST" action="">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="tahun_ajaran" class="form-label">Tahun Ajaran</label>
+            <select class="form-select" id="tahun_ajaran" name="tahun_ajaran" required>
+                <option value="" selected disabled>Pilih Tahun Ajaran</option>
+                {% for tahun in tahun_ajaran_list %}
+                <option value="{{ tahun.id }}">{{ tahun.tahun_ajaran }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="nama_semester" class="form-label">Nama Semester</label>
+            <input type="text" class="form-control" id="nama_semester" name="nama_semester" placeholder="Contoh: Ganjil / Genap" required>
+        </div>
+
+        <div class="form-check mb-3">
+            <input class="form-check-input" type="checkbox" value="true" id="aktif" name="aktif">
+            <label class="form-check-label" for="aktif">
+                Jadikan Semester ini Aktif
+            </label>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Tambah Semester</button>
+        <a href="{% url 'set_semester_aktif' %}" class="btn btn-secondary ms-2">Batal</a>
+    </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+{% endblock content %}

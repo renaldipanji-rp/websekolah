@@ -1,0 +1,38 @@
+{% extends "back/base.html" %}
+{% block content  %}
+<div class="container mt-4">
+    <h2>Detail Kelas: {{ kelas.nama }}</h2>
+    <p><strong>Wali Kelas:</strong> {{ kelas.wali_kelas.nama }}</p>
+
+    <h3>Daftar Siswa</h3>
+    {% if siswa_list %}
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Nama</th>
+                <th>NIS</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for siswa in siswa_list %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ siswa.nama }}</td>
+                <td>{{ siswa.nisn }}</td>
+                <td>
+                    <a href="{% url 'edit_siswa' siswa.id %}" class="btn btn-warning btn-sm">Edit</a>
+                    <a href="{% url 'hapus_siswa' siswa.id %}" class="btn btn-danger btn-sm">Hapus</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p class="text-muted">Belum ada siswa di kelas ini.</p> 
+    {% endif %}
+
+    <a href="{% url 'daftar_kelas' %}" class="btn btn-secondary mt-3">Kembali</a>
+</div>
+{% endblock content %}

@@ -1,0 +1,36 @@
+{% extends 'front/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Dashboard Wali Murid</h2>
+
+<div class="container my-4">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h2 class="mb-0">Selamat datang, {{ wali.nama }}</h2>
+        </div>
+        <div class="card-body">
+            <h4 class="card-title">Daftar Anak</h4>
+            {% if anak_list %}
+                <ul class="list-group list-group-flush">
+                    {% for anak in anak_list %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>{{ anak.nama }}</strong><br>
+                                <small>Kelas: {{ anak.kelas_terkini.nama_kelas|default:"Belum terdaftar di kelas" }}</small>
+                            </div>
+                            <a href="{% url 'detail_siswa' anak.id %}" class="btn btn-sm btn-outline-primary">Lihat Detail</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <div class="alert alert-info mt-3">
+                    Anda belum menjadi wali murid untuk siswa manapun.
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+</div>
+{% endblock %}

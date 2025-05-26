@@ -1,0 +1,29 @@
+{% extends 'back/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Edit Nilai Siswa</h2>
+
+    <div class="card p-4">
+        <h5 class="card-title">Edit Nilai untuk {{ rapor.siswa.nama }}</h5>
+        <form method="POST">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="mata_pelajaran" class="form-label">Mata Pelajaran:</label>
+                <select name="mata_pelajaran" class="form-select form-control" disabled>
+                    <option value="{{ rapor.mata_pelajaran.id }}">{{ rapor.mata_pelajaran.nama }}</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="nilai" class="form-label">Nilai:</label>
+                <input type="number" name="nilai" class="form-control" value="{{ rapor.nilai }}" required step="0.01">
+            </div>
+
+            <div class="mb-3">
+                <button type="submit" class="btn btn-success">Update Nilai</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,62 @@
+<!-- input_nilai.html -->
+{% extends 'back/base.html' %}
+
+{% block content %}
+    <div class="card mb-4">
+        <div class="card-header">
+            <h3>Input Nilai untuk Siswa: {{ siswa.nama }}</h3>
+        </div>
+        <div class="card-body">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show" role="alert">
+                        {{ message }} Untuk Semester Tersebut
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <form method="POST">
+                {% csrf_token %}
+                
+                <!-- Dropdown Semester -->
+                <div class="form-group mb-3">
+                    <label for="semester">Semester</label>
+                    <select name="semester" id="semester" class="form-control">
+                        <option value="Ganjil">Ganjil</option>
+                        <option value="Genap">Genap</option>
+                    </select>
+                </div>
+
+                <!-- Hidden Tahun Ajaran -->
+                <input type="hidden" name="tahun_ajaran" value="{{ tahun_ajaran_aktif.id }}">
+
+                <!-- Tabel Mata Pelajaran dan Input Nilai -->
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Nama Mata Pelajaran</th>
+                            <th>Nilai</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for mata_pelajaran in mata_pelajaran_list %}
+                            <tr>
+                                <td>{{ mata_pelajaran.nama }}</td>
+                                <td>
+                                    <input type="text" name="nilai_{{ mata_pelajaran.id }}" class="form-control" placeholder="Masukkan Nilai">
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+                <!-- Tombol Submit -->
+                <button type="submit" class="btn btn-success mt-3">Simpan Nilai</button>
+            </form>
+        </div>
+        <div class="card-footer">
+            <a href="{% url 'daftar_rapor' %}" class="btn btn-secondary">Kembali</a>
+        </div>
+    </div>
+{% endblock %}

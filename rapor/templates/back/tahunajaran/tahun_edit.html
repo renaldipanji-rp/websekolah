@@ -1,0 +1,20 @@
+{% extends "back/base.html" %}
+{% block content %}
+<div class="container py-4">
+    <div class="card shadow-sm">
+        <div class="card-header bg-warning text-white">
+            <h4 class="mb-0"><i class="fas fa-edit"></i> Edit Tahun Ajaran</h4>
+        </div>
+        <div class="card-body">
+            <form method="POST">
+                {% csrf_token %}
+                <div class="mb-3">
+                    {{ form.as_p }}
+                </div>
+                <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Simpan</button>
+                <a href="{% url 'daftar_tahun_ajaran' %}" class="btn btn-secondary">Batal</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

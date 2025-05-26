@@ -1,0 +1,29 @@
+{% extends 'back/base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">Dashboard Wali Kelas</h2>
+
+    {% if kelas_data %}
+        <div class="row">
+            {% for data in kelas_data %}
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title">{{ data.kelas.nama_kelas }}</h5>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Total Siswa:</strong> {{ data.total_siswa }}</p>
+                            <p><strong>Siswa Naik Kelas:</strong> {{ data.siswa_naik_kelas }}</p>
+                            <p><strong>Siswa Tidak Naik Kelas:</strong> {{ data.siswa_tidak_naik_kelas }}</p>
+                            <a href="{% url 'detail_kelas_wali' data.kelas.id %}" class="btn btn-primary w-100">Lihat Siswa</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info">Anda belum menjadi wali kelas untuk kelas manapun.</div>
+    {% endif %}
+</div>
+{% endblock %}

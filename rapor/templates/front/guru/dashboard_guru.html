@@ -1,0 +1,123 @@
+{% extends "front/guru/base.html" %}
+
+{% block content %}
+<div class="container">
+    <h2 class="text-center mb-4">Dashboard Guru</h2>
+
+    <style>
+        .card-container {
+          display: flex;
+          flex-wrap: wrap; 
+        }
+        .card-equal-height {
+          min-height: 200px;
+        }
+      </style>
+      
+      <div class="row card-container">
+        <div class="col-md-4 mb-3 card-equal-height">
+          <div class="card shadow-sm border-primary rounded-4 h-100">
+            <div class="card-header bg-primary text-white rounded-top-4">
+              <h5 class="card-title mb-0">Selamat Datang, {{ guru.nama }}</h5>
+            </div>
+            <div class="card-body">
+                <div class="row mb-2">
+                  <div class="col-5">
+                    <i class="bi bi-person-badge-fill text-primary me-2"></i><strong>NIP</strong>
+                  </div>
+                  <div class="col-6"> :
+                    {{ guru.nip }}
+                  </div>
+                </div>
+                <div class="row mb-2">
+                  <div class="col-5">
+                    <i class="bi bi-telephone-fill text-primary me-2"></i><strong>No. Telepon</strong>
+                  </div>
+                  <div class="col-6"> :
+                    {{ guru.no_telepon }}
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-5">
+                    <i class="bi bi-geo-alt-fill text-primary me-2"></i><strong>Alamat</strong>
+                  </div>
+                  <div class="col-6"> :
+                    {{ guru.alamat }}
+                  </div>
+                </div>
+              </div>
+          </div>
+        </div>
+      
+        <div class="col-md-4 mb-3 card-equal-height">
+          <div class="card shadow-sm border-success rounded-4 h-100">
+            <div class="card-header bg-success text-white rounded-top-4">
+              <h5 class="card-title mb-0">Mata Pelajaran</h5>
+            </div>
+            <div class="card-body">
+              <ul class="list-group list-group-flush">
+                {% for mapel in guru.mata_pelajaran.all %}
+                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                    {{ mapel.nama }}
+                  </li>
+                {% empty %}
+                  <li class="list-group-item text-muted text-center">Tidak ada mata pelajaran yang diajarkan.</li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+        </div>
+      
+        <div class="col-md-4 mb-3 card-equal-height">
+          <div class="card shadow-sm border-info rounded-4 h-100">
+            <div class="card-header bg-info text-white rounded-top-4">
+              <h5 class="card-title mb-0">Kelas yang Diampu</h5>
+            </div>
+            <div class="card-body">
+              <ul class="list-group list-group-flush">
+                {% for kelas in guru.kelas_wali.all %}
+                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                    {{ kelas.nama_kelas }}
+                  </li>
+                {% empty %}
+                  <li class="list-group-item text-muted text-center">Tidak ada kelas yang diampu.</li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    <!-- <div class="row mt-4">
+        <div class="col-md-4 mb-3">
+            <a href="{% url 'guru_list' %}" class="btn btn-primary btn-block">
+                <i class="fas fa-users"></i> Daftar Guru
+            </a>
+        </div>
+        <div class="col-md-4 mb-3">
+            <a href="{% url 'daftar_mata_pelajaran' %}" class="btn btn-success btn-block">
+                <i class="fas fa-book"></i> Mata Pelajaran
+            </a>
+        </div>
+        <div class="col-md-4 mb-3">
+            <a href="{% url 'daftar_kelas' %}" class="btn btn-info btn-block">
+                <i class="fas fa-school"></i> Kelas
+            </a>
+        </div>
+    </div> -->
+
+    <!-- <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Rapor Siswa</h5>
+                    <a href="{% url 'daftar_rapor' %}" class="btn btn-warning btn-block">
+                        <i class="fas fa-file-alt"></i> Lihat Rapor Siswa
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div> -->
+    
+</div>
+{% endblock %}

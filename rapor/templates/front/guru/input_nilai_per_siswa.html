@@ -1,0 +1,78 @@
+{% extends 'front/guru/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Input Nilai Siswa</h2>
+    
+    <h5 class="mb-3">Siswa: {{ siswa.nama }}</h5>
+    {% if error_message %}
+        <div class="alert alert-danger">
+            {{ error_message }}
+        </div>
+    {% endif %}
+
+    {% if messages %}
+        <div class="container mt-3">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    <!-- Form Input Nilai -->
+    <div class="card p-4">
+        <h5 class="card-title">Form Input Nilai</h5>
+        <form method="POST">
+            {% csrf_token %}
+            
+            <!-- Pilih Mata Pelajaran -->
+            <div class="mb-3">
+                <label for="mata_pelajaran" class="form-label">Mata Pelajaran:</label>
+                <select name="mata_pelajaran" id="mata_pelajaran" class="form-select" required>
+                    {% for mata_pelajaran in mata_pelajaran_list %}
+                        <option value="{{ mata_pelajaran.id }}">{{ mata_pelajaran.nama }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <!-- Input Nilai -->
+            <div class="mb-3">
+                <label for="nilai" class="form-label">Nilai:</label>
+                <input type="number" name="nilai" class="form-control" required step="0.01">
+            </div>
+            
+            <!-- Pilih Tahun Ajaran -->
+            {% if tahun_ajaran_list %}
+                {% with tahun_ajaran_aktif=tahun_ajaran_list.0 %}
+                    <div class="mb-3">
+                        <label for="tahun_ajaran_display" class="form-label">Tahun Ajaran Aktif:</label>
+                        
+                        <!-- Tampilkan ke user (tidak bisa diedit) -->
+                        <select id="tahun_ajaran_display" class="form-select" disabled>
+                            <option value="{{ tahun_ajaran_aktif.id }}">{{ tahun_ajaran_aktif.tahun_ajaran }}</option>
+                        </select>
+
+                        <!-- Dikirim ke server -->
+                        <input type="hidden" name="tahun_ajaran" value="{{ tahun_ajaran_aktif.id }}">
+                    </div>
+                {% endwith %}
+            {% endif %}
+
+
+
+            <!-- Pilih Semester -->
+            <div class="mb-3">
+                <label for="semester" class="form-label">Semester:</label>
+                <select name="semester" class="form-select" required>
+                    <option value="Ganjil">Ganjil</option>
+                    <option value="Genap">Genap</option>
+                </select>
+            </div>
+            
+            <button type="submit" class="btn btn-success">Simpan Nilai</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

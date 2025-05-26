@@ -1,0 +1,71 @@
+{% extends 'back/base.html' %}
+{% load static %}
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Detail Guru</h2>
+
+    <div class="card shadow-lg">
+        <div class="card-body">
+            <div class="row">
+                <!-- Foto Profil -->
+                <div class="col-md-4 text-center">
+                    {% if guru.foto_profil %}
+                        <img src="{{ guru.foto_profil.url }}" alt="Foto Profil" class="img-fluid rounded-circle" style="max-width: 200;">
+                    {% else %}
+                        <img src="{% static 'dist/img/avatar6.png' %}" alt="Foto Default" height="200" width="200" class="img-fluid rounded-circle">
+                    {% endif %}
+                </div>
+
+                <!-- Informasi Guru -->
+                <div class="col-md-8">
+                    <h4 class="card-title"></h4>
+                    <div class="row">
+                        <div class="col-2">
+                            <p><strong>Nama</strong></p>
+                        </div>
+                        <div class="col-10">
+                            <p>: {{ guru.nama }}</p>
+                        </div>
+                        <div class="col-2">
+                            <p><strong>NIP</strong></p>
+                        </div>
+                        <div class="col-10">
+                            <p>: {{ guru.nip }}</p>
+                        </div>
+                        <div class="col-2">
+                            <p><strong>No. Telepon</strong></p>
+                        </div>
+                        <div class="col-10">
+                            <p>: {{ guru.no_telepon }}</p>
+                        </div>
+                        <div class="col-2">
+                            <p><strong>Alamat</strong></p>
+                        </div>
+                        <div class="col-10">
+                            <p>: {{ guru.alamat }}</p>
+                        </div>
+                        <div class="col-2">
+                            <p><strong>Mata Pelajaran</strong></p>
+                        </div>
+                        <div class="col-10">
+                            :
+                        {% for mapel in guru.mata_pelajaran.all %}
+                            <span class="badge bg-info text-white">{{ mapel.nama }}</span>
+                        {% empty %}
+                            <span class="text-muted">Tidak ada</span>
+                        {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-end mt-3">
+                        <a href="{% url 'guru_list' %}" class="btn btn-secondary me-2">Kembali</a>
+                        <a href="{% url 'guru_update' guru.id %}" class="btn btn-warning me-2">Edit</a>
+                        <a href="{% url 'guru_delete' guru.id %}" class="btn btn-danger" 
+                           onclick="return confirm('Yakin ingin menghapus?');">Hapus</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

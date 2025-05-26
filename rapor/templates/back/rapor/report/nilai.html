@@ -1,0 +1,118 @@
+{% extends 'back/base.html' %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Card Utama -->
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h4 class="mb-0"><i class="fas fa-chart-line"></i> Nilai Siswa: {{ siswa.nama }}</h4>
+        </div>
+
+        <div class="card-body">
+            <form method="GET" class="mb-3">
+                <div class="row g-2">
+                    <!-- Dropdown Kelas -->
+                    <div class="col-md-4">
+                        <label for="kelas" class="form-label">Kelas:</label>
+                        <select name="kelas" id="kelas" class="form-select">
+                            <option value="">Semua Kelas</option>
+                            {% for kelas in daftar_kelas %}
+                                <option value="{{ kelas.id }}" {% if kelas_id|stringformat:"s" == kelas.id|stringformat:"s" %}selected{% endif %}>
+                                    {{ kelas.nama_kelas }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- Dropdown Tahun Ajaran -->
+                    <div class="col-md-4">
+                        <label for="tahun_ajaran" class="form-label">Tahun Ajaran:</label>
+                        <select name="tahun_ajaran" id="tahun_ajaran" class="form-select">
+                            <option value="">Semua Tahun Ajaran</option>
+                            {% for tahun in daftar_tahun_ajaran %}
+                                <option value="{{ tahun.id }}" {% if tahun_ajaran_id|stringformat:"s" == tahun.id|stringformat:"s" %}selected{% endif %}>
+                                    {{ tahun.tahun_ajaran }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- Dropdown Semester -->
+                    <div class="col-md-4">
+                        <label for="semester" class="form-label">Semester:</label>
+                        <select name="semester" id="semester" class="form-select">
+                            <option value="">Semua Semester</option>
+                            {% for key, value in daftar_semester %}
+                                <option value="{{ key }}" {% if semester == key %}selected{% endif %}>{{ value }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Tombol Filter -->
+                <div class="mt-3">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-filter"></i> Filter
+                    </button>
+                </div>
+            </form>
+
+
+            <!-- Tabel Nilai -->
+            <table class="table table-hover align-middle">
+                <thead class="table-primary">
+                    <tr>
+                        <th>Mata Pelajaran</th>
+                        <th>Nilai</th>
+                        <th>Predikat</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for rapor in rapor_list %}
+                    <tr>
+                        <td>{{ rapor.mata_pelajaran.nama }}</td>
+                        <td>{{ rapor.nilai }}</td>
+                        <td>
+                            {% if rapor.nilai >= 90 %} A
+                            {% elif rapor.nilai >= 80 %} B
+                            {% elif rapor.nilai >= 70 %} C
+                            {% elif rapor.nilai >= 60 %} D
+                            {% else %} F
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{% url 'edit_rapor' rapor.id %}" class="btn btn-warning btn-sm" data-bs-toggle="tooltip" title="Edit Nilai">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center text-muted">Tidak ada data nilai.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {% if not is_wali %}
+        <!-- Footer Card -->
+        <div class="card-footer text-end">
+            <a href="{% url 'daftar_rapor' %}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Kembali
+            </a>
+        </div>
+        {% endif %}
+
+    </div>
+</div>
+
+<!-- Tooltip Activation -->
+<script>
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+</script>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends "back/base.html" %}
+{% block content %}
+<h1 class="text-center mb-4">{% if form.instance.pk %}Edit{% else %}Tambah{% endif %} Mapel</h1>
+
+<div class="card">
+    <div class="card-body">
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-success">{% if form.instance.pk %}Update{% else %}Tambah{% endif %}</button>
+            <a href="{% url 'daftar_mata_pelajaran' %}" class="btn btn-secondary">Kembali</a>
+        </form>
+    </div>
+</div>
+{% endblock content %}

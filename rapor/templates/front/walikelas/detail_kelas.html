@@ -1,0 +1,35 @@
+{% extends 'back/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Detail Kelas {{ kelas.nama_kelas }}</h2>
+
+    <h5>Daftar Siswa</h5>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Nama Siswa</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for siswa in siswa_list %}
+                <tr>
+                    <td>{{ siswa.nama }}</td>
+                    <td>
+                        <a href="{% url 'naik_kelas' siswa.id %}" class="btn btn-success">Naik Kelas</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <hr>
+
+    <h5>Naikkan Semua Siswa ke Kelas Berikutnya</h5>
+    <form method="POST" action="{% url 'naik_kelas_batch' kelas.id %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-warning">Naikkan Semua Siswa</button>
+    </form>
+</div>
+{% endblock %}

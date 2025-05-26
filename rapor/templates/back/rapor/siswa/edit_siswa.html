@@ -1,0 +1,18 @@
+{% extends 'back/base.html' %}
+
+{% block title %}{% if form.instance.pk %}Edit{% else %}Tambah{% endif %} Siswa{% endblock %}
+
+{% block content %}
+<h1 class="text-center mb-4">{% if form.instance.pk %}Edit{% else %}Tambah{% endif %} Siswa</h1>
+
+<div class="card">
+    <div class="card-body">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-success">{% if form.instance.pk %}Update{% else %}Tambah{% endif %}</button>
+            <a href="{% url 'daftar_siswa' %}" class="btn btn-secondary">Kembali</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

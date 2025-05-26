@@ -1,0 +1,45 @@
+{% extends "blog/baseblog.html" %}
+
+{% block content %}
+<!-- Page content -->
+<div class="container mt-5">
+    <div class="row">
+        <!-- Blog entries -->
+        <div class="col-lg-8">
+            {% if posts %}
+                <!-- Featured blog post -->
+                <div class="card mb-4">
+                    <a href="{{ posts.0.get_absolute_url }}">
+                        <img class="card-img-top rounded" src="{{ posts.0.image_url }}" alt="{{ posts.0.title }}" />
+                    </a>
+                    <div class="card-body">
+                        <div class="small text-muted mb-2">{{ posts.0.created_at }}</div>
+                        <h2 class="card-title">{{ posts.0.title }}</h2>
+                        <p class="card-text">{{ posts.0.content|truncatewords:50 }}</p>
+                        <a class="btn btn-primary" href="{{ posts.0.get_absolute_url }}">Read more →</a>
+                    </div>
+                </div>
+            {% endif %}
+
+            <!-- Nested row for non-featured blog posts -->
+            <div class="row">
+                {% for post in posts|slice:"1:" %}
+                    <div class="col-lg-6 mb-4">
+                        <div class="card">
+                            <a href="{{ post.get_absolute_url }}">
+                                <img class="card-img-top rounded" src="{{ post.image_url }}" alt="{{ post.title }}" />
+                            </a>
+                            <div class="card-body">
+                                <div class="small text-muted mb-2">{{ post.created_at }}</div>
+                                <h2 class="card-title h4">{{ post.title }}</h2>
+                                <p class="card-text">{{ post.content|truncatewords:30 }}</p>
+                                <a class="btn btn-primary" href="{{ post.get_absolute_url }}">Read more →</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

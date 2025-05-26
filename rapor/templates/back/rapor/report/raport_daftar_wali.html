@@ -1,0 +1,55 @@
+{% extends 'front/base.html' %}
+
+{% block content %}
+<div class="container py-4">
+    {% if tahun_ajaran_aktif %}
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0"><i class="fas fa-book"></i> Daftar Rapor Siswa Wali</h4>
+        </div>
+
+        <div class="card-body">
+            <table class="table table-hover align-middle">
+                <thead class="table-primary">
+                    <tr>
+                        <th>Nama Siswa</th>
+                        <th>Kelas</th>
+                        <th>Semester Rapor</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for siswa in siswa_list %}
+                    <tr>
+                        <td>{{ siswa.nama }}</td>
+                        <td>{{ siswa.kelas_terkini }}</td>
+                        <td>{{ siswa.semester_rapor }}</td>
+                        <td>
+                            <a href="{% url 'tabel_nilai_siswa' siswa.id %}" class="btn btn-info btn-sm" data-bs-toggle="tooltip" title="Lihat Rapor">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center text-muted">Belum ada data rapor siswa.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% else %}
+    <div class="alert alert-warning">
+        Belum ada Tahun Ajaran yang aktif.
+    </div>
+    {% endif %}
+</div>
+
+<script>
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+</script>
+{% endblock %}
