@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: websekolah
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn websekolah.wsgi:application
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: websekolah.settings
