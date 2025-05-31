@@ -1,0 +1,21 @@
+{% extends "back/base.html" %}
+{% block content %}
+<div class="container mt-4">
+  <h2>{{ title }}</h2>
+<form method="POST" enctype="multipart/form-data">
+  {% csrf_token %}
+  {% for field in form %}
+    <div class="mb-3">
+      {{ field.label_tag }}
+      {{ field }}
+      {% if field.errors %}
+        <div class="text-danger">{{ field.errors }}</div>
+      {% endif %}
+    </div>
+  {% endfor %}
+  <button type="submit" class="btn btn-success">Simpan</button>
+  <a href="{% url 'list_blog' %}" class="btn btn-secondary">Batal</a>
+</form>
+
+</div>
+{% endblock %}

@@ -156,3 +156,18 @@ class Rapor(models.Model):
 
     def __str__(self):
         return f"{self.siswa.nama} - {self.mata_pelajaran.nama} - {self.nilai} - {self.kelas.nama_kelas}"
+
+class Blog(models.Model):
+    judul = models.CharField(max_length=200)
+    isi = models.TextField()
+    penulis = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    gambar = models.ImageField(upload_to='blog_images/', null=True, blank=True)
+    tanggal_dibuat = models.DateTimeField(auto_now_add=True)
+    tanggal_diperbarui = models.DateTimeField(auto_now=True)
+    publish = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ['-tanggal_dibuat']
+
+    def __str__(self):
+        return self.judul

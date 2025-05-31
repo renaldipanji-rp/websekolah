@@ -158,6 +158,16 @@
       </li>
 
       <!-- Menu Siswa -->
+
+      {% if request.session.user_group == 'admin'%}
+      <li class="nav-item">
+          <a href="{% url 'list_blog' %}" class="nav-link">
+              <i class="nav-icon  fa-solid fa-blog"></i>
+              <p>Data Blog</p>
+          </a>
+      </li>
+      {% endif %}
+
       {% if request.session.user_group == 'admin' or request.session.user_group == 'guru'  %}
       <li class="nav-item">
           <a href="{% url 'daftar_siswa' %}" class="nav-link">

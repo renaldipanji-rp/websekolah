@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Siswa, Wali, MataPelajaran, Kelas, TahunAjaran, Rapor,Guru, User, StatusSiswaTahunAjaran, SemesterAktif
-from .forms import SiswaForm, WaliForm, MataPelajaranForm, KelasForm, TahunAjaranForm, RaporForm,GuruForm, ResetPasswordForm
+from .models import Siswa, Wali, MataPelajaran, Kelas, TahunAjaran, Rapor,Guru, User, StatusSiswaTahunAjaran, SemesterAktif, Blog
+from .forms import SiswaForm, WaliForm, MataPelajaranForm, KelasForm, TahunAjaranForm, RaporForm,GuruForm, ResetPasswordForm, BlogForm
 from django.contrib import messages
 from django.db.models import Prefetch
 from django.db import IntegrityError
@@ -882,11 +882,13 @@ def dashboard_walikelas(request):
 # dashboard wali murid
 def dashboard_walimurid(request):
     wali = get_object_or_404(Wali, user=request.user)
+    blogs = Blog.objects.filter(publish=True)
     anak_list = wali.siswa.all()  # Ambil semua siswa yang diasuh oleh wali ini
 
     return render(request, 'front/walimurid/dashboard_walimurid.html', {
         'wali': wali,
-        'anak_list': anak_list
+        'anak_list': anak_list,
+        'blogs' : blogs
     })
 
 #fitur guru only
@@ -1048,3 +1050,70 @@ def detail_kelas_wali (request, kelas_id):
         'kelas': kelas,
         'siswa_list': siswa_list,
     })
+
+
+def daftar_blog(request):
+    blogs = Blog.objects.filter(publish=True)
+    return render(request, 'front/blog/daftar_blog.html', {'blogs': blogs})
+
+def detail_blog(request, pk):
+    blog = get_object_or_404(Blog, pk=pk)
+    return render(request, 'front/blog/detail_blog.html', {'blog': blog})
+
+@login_required
+def tambah_blog(request):
+    if request.method == 'POST':
+        form = BlogForm(request.POST, request.FILES)
+        if form.is_valid():
+            blog = form.save(commit=False)
+            blog.penulis = request.user
+            blog.save()
+            return redirect('list_blog')
+    else:
+        form = BlogForm()
+    return render(request, 'front/blog/tambah_blog.html', {'form': form})
+
+@login_required
+def edit_blog(request, blog_id):
+    blog = get_object_or_404(Blog, id=blog_id)
+    old_gambar_path = blog.gambar.path if blog.gambar else None
+    old_gambar_name = blog.gambar.name if blog.gambar else None
+
+    if request.method == "POST":
+        form = BlogForm(request.POST, request.FILES, instance=blog)
+        if form.is_valid():
+            new_gambar = form.cleaned_data.get('gambar')
+
+            if new_gambar and old_gambar_path and os.path.isfile(old_gambar_path):
+                if old_gambar_name != new_gambar.name:
+                    os.remove(old_gambar_path)
+
+            # Jika gambar dikosongkan (misal menggunakan ClearableFileInput)
+            if not new_gambar and old_gambar_path and os.path.isfile(old_gambar_path):
+                os.remove(old_gambar_path)
+
+            form.save()
+            messages.success(request, "Blog berhasil diperbarui")
+            return redirect('detail_blog', pk=blog.id)
+    else:
+        form = BlogForm(instance=blog)
+
+    return render(request, 'front/blog/tambah_blog.html', {'form': form})
+
+@login_required
+def hapus_blog(request, pk):
+    blog = get_object_or_404(Blog, pk=pk)
+    if request.method == "POST":
+        # Hapus file gambar lama jika ada
+        if blog.gambar:
+            gambar_path = blog.gambar.path
+            if os.path.isfile(gambar_path):
+                os.remove(gambar_path)
+
+        blog.delete()
+        return redirect('list_blog')
+    return render(request, 'front/blog/hapus_blog.html', {'blog': blog})
+
+def list_blog(request):
+    blogs = Blog.objects.all().order_by('-id')  # urut terbaru dulu
+    return render(request, 'front/blog/list_blog.html', {'blogs': blogs})

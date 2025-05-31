@@ -85,6 +85,13 @@ urlpatterns = [
     path('wali-kelas/kelas_wali/<int:kelas_id>/', views.detail_kelas_wali, name='detail_kelas_wali'),
     path('wali-kelas/naik-kelas/<int:siswa_id>/', views.naik_kelas, name='naik_kelas'),
    path('wali-kelas/naik-kelas-batch/<int:kelas_id>/', views.naik_kelas_batch, name='naik_kelas_batch'),
+
+    path('', views.daftar_blog, name='daftar_blog'),
+    path('blogs/', views.list_blog, name='list_blog'),
+    path('blog/detail/<int:pk>/', views.detail_blog, name='detail_blog'),
+    path('blog/tambah/', views.tambah_blog, name='tambah_blog'),
+    path('blog/edit/<int:blog_id>/', views.edit_blog, name='edit_blog'),
+    path('blog/hapus/<int:pk>/', views.hapus_blog, name='hapus_blog'),
 ]
 
 

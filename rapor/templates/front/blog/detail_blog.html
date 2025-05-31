@@ -1,0 +1,25 @@
+{% extends 'back/base.html' %}
+{% block content %}
+<div class="container mt-4">
+    
+    <h2>{{ blog.judul }}</h2>
+    <p class="text-muted">Oleh {{ blog.penulis }} - {{ blog.tanggal_dibuat|date:"d M Y H:i" }}</p>
+    {% if blog.gambar %}
+    <div class="mb-3">
+        <img src="{{ blog.gambar.url }}" class="img-fluid rounded" alt="Gambar Blog">
+    </div>
+    {% endif %}
+  <p>{{ blog.isi|linebreaks }}</p>
+  {% if request.session.user_group != 'wali'%}
+  <a href="{% url 'edit_blog' blog.id %}" class="btn btn-warning">Edit</a>
+  <a href="{% url 'hapus_blog' blog.id %}" class="btn btn-danger">Hapus</a>
+  {% endif %}
+  {% if request.session.user_group == 'wali'%}
+  <a href="{% url 'dashboard_walimurid' %}" class="btn btn-secondary">Kembali</a>
+  {% else %}
+  <a href="{% url 'list_blog' %}" class="btn btn-secondary">Kembali</a>
+  {% endif %}
+
+  
+</div>
+{% endblock %}

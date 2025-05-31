@@ -1,5 +1,5 @@
 from django import forms
-from .models import Siswa, Wali, MataPelajaran, Kelas, TahunAjaran, Rapor, Guru
+from .models import Siswa, Wali, MataPelajaran, Kelas, TahunAjaran, Rapor, Guru, Blog
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
@@ -196,3 +196,21 @@ class ResetPasswordForm(SetPasswordForm):
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
             field.widget.attrs.update({'class': 'form-control'})
+
+class BlogForm(forms.ModelForm):
+    class Meta:
+        model = Blog
+        fields = ['judul', 'isi', 'gambar', 'publish']
+        widgets = {
+            'gambar': forms.ClearableFileInput()
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            if isinstance(field.widget, forms.CheckboxInput) or isinstance(field.widget, forms.RadioSelect):
+                field.widget.attrs.update({"class": "form-check-input"})
+            elif isinstance(field.widget, forms.Textarea):
+                field.widget.attrs.update({"class": "form-control", "rows": "4"})
+            else:
+                field.widget.attrs.update({"class": "form-control"})
