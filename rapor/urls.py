@@ -5,7 +5,7 @@ from . import views
 
 urlpatterns = [
     # Login
-    path('login/', views.login, name='login'),
+    path('', views.login, name='login'),
     path('logout/', views.logout_view, name='logout'),
 
     path('users/add/', views.user_add, name='tambah_user'),
@@ -86,7 +86,7 @@ urlpatterns = [
     path('wali-kelas/naik-kelas/<int:siswa_id>/', views.naik_kelas, name='naik_kelas'),
    path('wali-kelas/naik-kelas-batch/<int:kelas_id>/', views.naik_kelas_batch, name='naik_kelas_batch'),
 
-    path('', views.daftar_blog, name='daftar_blog'),
+    path('daftar-blog', views.daftar_blog, name='daftar_blog'),
     path('blogs/', views.list_blog, name='list_blog'),
     path('blog/detail/<int:pk>/', views.detail_blog, name='detail_blog'),
     path('blog/tambah/', views.tambah_blog, name='tambah_blog'),
