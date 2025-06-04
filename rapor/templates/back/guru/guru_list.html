@@ -1,40 +1,33 @@
 {% extends "back/base.html" %}
 {% block content %}
-<div class="container mt-4">
-    <h2 class="mb-4">Daftar Guru</h2>
-    
-    <!-- Tombol Tambah Guru -->
-    <div class="row align-items-center mb-3">
-        <!-- Kolom Tambah Guru -->
-        <div class="col-md-6 d-flex">
-            <a href="{% url 'guru_create' %}" class="btn btn-primary">Tambah Guru</a>
-        </div>
+<div class="container py-4">
 
-        <!-- Kolom Form Pencarian -->
-        <div class="col-md-6">
-            <form class="d-flex justify-content-end">
-                <input type="text" class="form-control me-2" placeholder="Cari Guru..." name="q" aria-label="Search">
-                <button class="btn btn-outline-secondary" type="submit">Cari</button>
-            </form>
-        </div>
-    </div>
-
+    <!-- Tombol Tambah -->
+    <a href="{% url 'guru_create' %}" class="btn btn-success mb-4">
+        <i class="fas fa-plus"></i> Tambah Guru
+    </a>
 
     <!-- Notifikasi -->
     {% if messages %}
+    <div class="container mb-3">
         {% for message in messages %}
-            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                {{ message }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
         {% endfor %}
+    </div>
     {% endif %}
 
-    <!-- Card Daftar Guru -->
-    <div class="card">
+    <!-- Card Utama -->
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h4 class="mb-0"><i class="fas fa-users"></i> Daftar Guru</h4>
+        </div>
         <div class="card-body">
-            <table class="table table-striped">
-                <thead class="table-dark">
+            <!-- Tabel Guru -->
+            <table class="table table-hover align-middle">
+                <thead class="table-primary">
                     <tr>
                         <th>Nama</th>
                         <th>NIP</th>
@@ -45,7 +38,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for guru in guru %}
+                    {% for guru in gurus %}
                     <tr>
                         <td>
                             <a href="{% url 'guru_detail' guru.id %}" class="text-decoration-none">
@@ -58,48 +51,52 @@
                         <td>
                             <div class="d-flex flex-wrap gap-2">
                                 {% for mapel in guru.mata_pelajaran.all %}
-                                    <span class="badge bg-info">{{ mapel.nama }}</span>
+                                <span class="badge bg-info">{{ mapel.nama }}</span>
                                 {% endfor %}
                             </div>
                         </td>
                         <td>
-                            <div class="d-flex flex-wrap gap-2">
-                                <a href="{% url 'guru_update' guru.id %}" class="btn btn-warning btn-sm" data-bs-toggle="tooltip" title="Edit Guru" ><i class="fas fa-edit"></i></a>
-                                <a href="{% url 'guru_reset_password' guru.id %}" class="btn btn-secondary btn-sm" data-bs-toggle="tooltip" title="Reset Pass"><i class="fa-solid fa-lock-open"></i></a>
-                                <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#hapusGuruModal{{ guru.id }}"><i class="fas fa-trash"></i></button>
-                            </div>
+                            <!-- Tombol Aksi -->
+                            <a href="{% url 'guru_update' guru.id %}" class="btn btn-warning btn-sm" data-bs-toggle="tooltip" title="Edit Guru">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a href="{% url 'guru_reset_password' guru.id %}" class="btn btn-secondary btn-sm" data-bs-toggle="tooltip" title="Reset Password">
+                                <i class="fa-solid fa-lock-open"></i>
+                            </a>
+                            <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#hapusGuruModal{{ guru.id }}" data-bs-toggle="tooltip" title="Hapus Guru">
+                                <i class="fas fa-trash"></i>
+                            </button>
 
-                            <!-- Modal konfirmasi hapus -->
+                            <!-- Modal Konfirmasi Hapus -->
                             <div class="modal fade" id="hapusGuruModal{{ guru.id }}" tabindex="-1" aria-labelledby="hapusGuruModalLabel{{ guru.id }}" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered">
-                                <div class="modal-content">
-                                    <div class="modal-header bg-danger text-white">
-                                        <h5 class="modal-title" id="hapusGuruModalLabel{{ guru.id }}">Konfirmasi Hapus</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        Apakah Anda yakin ingin menghapus guru <strong>{{ guru.nama }}</strong>?
-
-                                        <div class="form-check mt-3">
-                                            <input class="form-check-input" type="checkbox" name="hapus_user" id="hapusUser{{ guru.id }}">
-                                            <label class="form-check-label" for="hapusUser{{ guru.id }}">
-                                                Hapus juga akun user yang terkait
-                                            </label>
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header bg-danger text-white">
+                                            <h5 class="modal-title" id="hapusGuruModalLabel{{ guru.id }}">Konfirmasi Hapus</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                                        <form method="POST" action="{% url 'guru_delete' guru.id %}">
-                                            {% csrf_token %}
-                                            <input type="hidden" name="hapus_user_input" id="hapusUserInput{{ guru.id }}">
-                                            <button type="submit" class="btn btn-danger">Hapus</button>
-                                        </form>
+                                        <div class="modal-body">
+                                            Apakah Anda yakin ingin menghapus guru <strong>{{ guru.nama }}</strong>?
+                                            <div class="form-check mt-3">
+                                                <input class="form-check-input" type="checkbox" name="hapus_user" id="hapusUser{{ guru.id }}">
+                                                <label class="form-check-label" for="hapusUser{{ guru.id }}">
+                                                    Hapus juga akun user yang terkait
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                            <form method="POST" action="{% url 'guru_delete' guru.id %}">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="hapus_user_input" id="hapusUserInput{{ guru.id }}">
+                                                <button type="submit" class="btn btn-danger">Hapus</button>
+                                            </form>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                            <!-- Akhir Modal -->
                         </td>
-
                     </tr>
                     {% empty %}
                     <tr>
@@ -111,20 +108,26 @@
         </div>
     </div>
 </div>
-</div>
 
+<!-- Tooltip Activation -->
 <script>
-    // Script untuk memasukkan value checkbox ke input tersembunyi sebelum submit
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+
+    // Checkbox value ke hidden input sebelum submit
     document.addEventListener('DOMContentLoaded', function () {
-        const modalId = "hapusGuruModal{{ guru.id }}";
-        const modalEl = document.getElementById(modalId);
-        modalEl.addEventListener('shown.bs.modal', function () {
-            const checkbox = modalEl.querySelector('#hapusUser{{ guru.id }}');
-            const hiddenInput = modalEl.querySelector('#hapusUserInput{{ guru.id }}');
-            checkbox.addEventListener('change', function () {
-                hiddenInput.value = this.checked ? '1' : '';
+        {% for guru in guru %}
+        const checkbox{{ guru.id }} = document.getElementById("hapusUser{{ guru.id }}");
+        const hiddenInput{{ guru.id }} = document.getElementById("hapusUserInput{{ guru.id }}");
+        if (checkbox{{ guru.id }} && hiddenInput{{ guru.id }}) {
+            checkbox{{ guru.id }}.addEventListener('change', function () {
+                hiddenInput{{ guru.id }}.value = this.checked ? '1' : '';
             });
-        });
+        }
+        {% endfor %}
     });
 </script>
+
 {% endblock %}

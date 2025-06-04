@@ -5,7 +5,9 @@ from . import views
 
 urlpatterns = [
     # Login
-    path('', views.login, name='login'),
+    path('', views.welcome, name='welcome'),
+    path('blog-w/<int:pk>/', views.detail_blog_welcome, name='detail_blogw'),
+    path('login/', views.login, name='login'),
     path('logout/', views.logout_view, name='logout'),
 
     path('users/add/', views.user_add, name='tambah_user'),
@@ -66,7 +68,7 @@ urlpatterns = [
     path('rapor/<int:rapor_id>/edit/', views.edit_rapor, name='edit_rapor'),
     path('rapor/<int:rapor_id>/hapus/', views.hapus_rapor, name='hapus_rapor'),
     path('rapor/input_nilai/<int:siswa_id>/', views.input_nilai, name='input_nilai'),
-    path('edit_rapor/<int:siswa_id>/', views.edit_rapor, name='edit_rapor'),
+    path('edit_rapor/<int:siswa_id>/', views.edit_rapor_siswa, name='edit_rapor'),
     path('rapor/nilai_siswa/<int:siswa_id>/', views.tabel_nilai_siswa, name='tabel_nilai_siswa'),
 
     # Guru

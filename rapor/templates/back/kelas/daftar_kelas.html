@@ -1,20 +1,13 @@
 {% extends "back/base.html" %}
 
 {% block content %}
-<style>
-    .btn-icon {
-        width: 38px;
-        height: 30px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 0;
-    }
-</style>
 <div class="container py-4">
+            <a href="{% url 'tambah_kelas' %}" class="btn btn-success mb-4">
+                <i class="fas fa-plus"></i> Tambah Kelas
+            </a>
             {% if messages %}
                 {% for message in messages %}
-                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    <div class="alert alert-{{ message.tags }} alert-dismissible mb-4 fade show" role="alert">
                         {{ message }}
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
@@ -24,9 +17,6 @@
     <div class="card shadow-sm">
         <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
             <h4 class="mb-0"><i class="fas fa-chalkboard-teacher"></i> Daftar Kelas</h4>
-            <a href="{% url 'tambah_kelas' %}" class="btn btn-success btn-sm">
-                <i class="fas fa-plus"></i> Tambah Kelas
-            </a>
         </div>
 
         <div class="card-body">
@@ -46,21 +36,19 @@
                         <td>{{ kelas.nama_kelas }}</td>
                         <td>{{ kelas.wali_kelas }}</td>
                         <td>
-                            <div class="btn-group" role="group">
-                                <a href="{% url 'detail_kelas' kelas.id %}" class="btn btn-info btn-sm btn-icon" data-bs-toggle="tooltip" title="Lihat Detail">
+                                <a href="{% url 'detail_kelas' kelas.id %}" class="btn btn-info btn-sm btn-sm" data-bs-toggle="tooltip" title="Lihat Detail">
                                     <i class="fas fa-eye"></i>
                                 </a>
-                                <a href="{% url 'edit_kelas' kelas.id %}" class="btn btn-warning btn-sm btn-icon" data-bs-toggle="tooltip" title="Edit Kelas">
+                                <a href="{% url 'edit_kelas' kelas.id %}" class="btn btn-warning btn-sm btn-sm" data-bs-toggle="tooltip" title="Edit Kelas">
                                     <i class="fas fa-edit"></i>
                                 </a>
                                 <form action="{% url 'hapus_kelas' kelas.id %}" method="POST" class="d-inline">
                                     {% csrf_token %}
-                                    <button type="submit" class="btn btn-danger btn-sm btn-icon" data-bs-toggle="tooltip" title="Hapus Kelas"
+                                    <button type="submit" class="btn btn-danger btn-sm btn-sm" data-bs-toggle="tooltip" title="Hapus Kelas"
                                             onclick="return confirm('Yakin ingin menghapus kelas ini?');">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </form>
-                            </div>
                         </td>
                     </tr>
                     {% empty %}

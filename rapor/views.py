@@ -495,6 +495,7 @@ def daftar_rapor(request):
     for siswa in siswa_list:
         semesters = siswa.rapor_set.values_list('semester', flat=True).distinct()
         siswa.semester_rapor = ", ".join(semesters) if semesters else "-"
+        siswa.semester_rapor_list = list(semesters) if semesters else []
 
     context = {
         'siswa_list': siswa_list,
@@ -624,9 +625,13 @@ def input_nilai(request, siswa_id):
         'tahun_ajaran_aktif': tahun_ajaran_aktif
     })
     
-def edit_rapor(request, siswa_id):
+def edit_rapor_siswa(request, siswa_id):
+
+    semester = request.GET.get('semester')
+    tahun_ajaran_id = request.GET.get('tahun_ajaran')
+    kelas_id = request.GET.get('kelas')
     siswa = get_object_or_404(Siswa, id=siswa_id)
-    rapor_list = Rapor.objects.filter(siswa=siswa)
+    rapor_list = Rapor.objects.filter(siswa=siswa, semester= semester, tahun_ajaran = tahun_ajaran_id, kelas = kelas_id)
 
     # Mengambil tahun ajaran aktif
     tahun_ajaran_aktif = TahunAjaran.objects.filter(mulai__lte=timezone.now(), selesai__gte=timezone.now()).first()
@@ -640,7 +645,8 @@ def edit_rapor(request, siswa_id):
                 rapor.nilai = nilai
                 rapor.semester = semester
                 rapor.save()
-
+        msg_str = "Data Semester "+ semester + " berhasil diedit"
+        messages.success(request, msg_str)
         return redirect('daftar_rapor')  # Mengarahkan ke halaman daftar rapor setelah berhasil
 
     return render(request, 'back/rapor/report/raport_edit.html', {
@@ -702,7 +708,7 @@ def tabel_nilai_siswa(request, siswa_id):
 # crud Guru
 def guru_list(request):
     guru = Guru.objects.all()
-    return render(request, 'back/guru/guru_list.html', {'guru': guru,'user': request.user,})
+    return render(request, 'back/guru/guru_list.html', {'gurus': guru,'user': request.user,})
 
 from django.contrib.auth.models import Group
 
@@ -801,6 +807,18 @@ def guru_detail(request, id):
     guru = get_object_or_404(Guru, id=id)
     return render(request, 'back/guru/guru_details.html', {'guru': guru})
 
+def welcome(request):
+    blogs = Blog.objects.filter(publish=True)
+    
+    return render(request, 'gate/welcome.html', {
+        'blogs' : blogs
+    })
+
+def detail_blog_welcome(request, pk):
+    blog = get_object_or_404(Blog, pk=pk, publish=True)
+    return render(request, 'gate/detail_blog.html', {
+        'blog': blog
+    })
 
 #dashboard
 def login(request):

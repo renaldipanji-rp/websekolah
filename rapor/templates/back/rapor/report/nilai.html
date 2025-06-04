@@ -65,7 +65,7 @@
                         <th>Mata Pelajaran</th>
                         <th>Nilai</th>
                         <th>Predikat</th>
-                        <th>Aksi</th>
+                        <!-- <th>Aksi</th> -->
                     </tr>
                 </thead>
                 <tbody>
@@ -81,11 +81,11 @@
                             {% else %} F
                             {% endif %}
                         </td>
-                        <td>
+                        <!-- <td>
                             <a href="{% url 'edit_rapor' rapor.id %}" class="btn btn-warning btn-sm" data-bs-toggle="tooltip" title="Edit Nilai">
                                 <i class="fas fa-edit"></i>
                             </a>
-                        </td>
+                        </td> -->
                     </tr>
                     {% empty %}
                     <tr>
