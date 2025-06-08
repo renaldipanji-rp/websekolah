@@ -28,6 +28,7 @@ var/
 local_settings.py
 media/
 staticfiles/
+db.sqlite3
 
 # If you have a virtual environment folder, ignore it:
 venv/
